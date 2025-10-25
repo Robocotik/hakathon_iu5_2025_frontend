@@ -1,117 +1,108 @@
 name: Test DLC Frontend CI
-on: [push, workflow_dispatch, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 jobs:
+  telegram-notify:
+    name: Send Telegram notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: send telegram message on push
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
   install-cache:
     name: Install cache
     runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-ci.outputs.key }}
     steps:
-      - name: Checkout Commit
+      - name: Get the repository code
         uses: actions/checkout@v5
-
-      - name: Cache npm dependencies
+      - name: Set cache key
         id: cache-ci
+        run: echo "key=node-modules-${{ hashFiles('**/package-lock.json') }}" >> $GITHUB_OUTPUT
+
+      - name: Cache ci dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install Dependencies
-        if: steps.cache-ci.outputs.cache-hit != 'true'
-        run: npm ci
+          path: ~/.npm
+          key: ${{ steps.cache-ci.outputs.key }}
   eslint-check:
     name: Eslint check
     runs-on: ubuntu-latest
-    needs: install-cache
+    needs: ['install-cache']
     steps:
-      - uses: actions/checkout@v5
+      - name: Get the repository code
+        uses: actions/checkout@v5
       - name: Restore npm cache
         uses: actions/cache@v4
-        id: cache-ci
         with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          key: ${{ needs.install-cache.outputs.cache-key }}
+      - name: Install dependencies
+        run: npm ci
       - name: Run eslint check
         run: npm run eslint:fix
-
   prettier-check:
     name: Prettier check
     runs-on: ubuntu-latest
-    needs: install-cache
+    needs: ['install-cache']
     steps:
-      - uses: actions/checkout@v5
+      - name: Get the repository code
+        uses: actions/checkout@v5
       - name: Restore npm cache
         uses: actions/cache@v4
-        id: cache-ci
         with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          key: ${{ needs.install-cache.outputs.cache-key }}
+      - name: Install dependencies
+        run: npm ci
       - name: Run prettier fix
         run: npm run prettier:fix
-
   typescript-check:
     name: TypeScript check
-    needs: install-cache
+    needs: ['install-cache']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Get the repository code
+        uses: actions/checkout@v5
       - name: Restore npm cache
         uses: actions/cache@v4
-        id: cache-ci
         with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          key: ${{ needs.install-cache.outputs.cache-key }}
+      - name: Install dependencies
+        run: npm ci
       - name: Run TypeScript check
         run: npm run ts:check
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs:
-      - install-cache
-      - eslint-check
-      - prettier-check
-      - typescript-check
+    needs: ['install-cache', 'eslint-check', 'prettier-check', 'typescript-check']
     steps:
-      - name: Checkout Commit
+      - name: Get the repository code
         uses: actions/checkout@v5
-
       - name: Restore npm cache
         uses: actions/cache@v4
-        id: cache-ci
         with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Создание env файла
-        run: |
-          touch .env
-          echo NEXT_PUBLIC_API_URL=http://109.120.190.243:8001/api >> .env
-          cat .env
-
-      - name: Build project
+          path: ~/.npm
+          key: ${{ needs.install-cache.outputs.cache-key }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run build
         run: npm run build
 
-      - name: Save build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: |
-            .next
-            package.json
-            package-lock.json
-          retention-days: 1
   deploy:
     name: Deploy to Server
     runs-on: ubuntu-latest
@@ -141,7 +132,7 @@ jobs:
 
             # Переходим в папку и клонируем репозиторий
             cd /var/www/dlc
-            git clone -b sasha https://github.com/Robocotik/hakathon_iu5_2025_frontend.git .
+            git clone -b main https://github.com/Robocotik/hakathon_iu5_2025_frontend.git .
 
             # Создание env файла
             echo "Creating .env file..."
@@ -170,6 +161,7 @@ jobs:
             pm2 start npm --name "dlc" -- start
             pm2 save
             pm2 list
+
   notify_success:
     name: Success Message
     runs-on: ubuntu-latest
