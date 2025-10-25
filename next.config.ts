@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next';
-
 const nextConfig: NextConfig = {
   turbopack: {
     resolveAlias: {
@@ -7,5 +6,4 @@ const nextConfig: NextConfig = {
     },
   },
 };
-
 export default nextConfig;
