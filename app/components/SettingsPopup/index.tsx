@@ -1,4 +1,5 @@
 import React from 'react';
+import {useRouter} from 'next/navigation';
 
 interface SettingsPopupProps {
   isOpen: boolean;
@@ -7,9 +8,11 @@ interface SettingsPopupProps {
 }
 
 export const SettingsPopup: React.FC<SettingsPopupProps> = ({isOpen, onClose, position}) => {
+  const router = useRouter();
+
   const handleLogin = () => {
-    // Логика для входа
-    console.log('Login clicked');
+    // Переход на страницу логина
+    router.push('/login');
     onClose();
   };
 

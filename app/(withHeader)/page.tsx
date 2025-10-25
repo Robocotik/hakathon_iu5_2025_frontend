@@ -1,11 +1,8 @@
-import {Header} from './components/Header';
-import {Planet} from './components/Planet';
+import {Planet} from '../components/Planet';
 
 export default function Home() {
   return (
     <main className='min-h-screen bg-black relative overflow-hidden'>
-      <Header />
-
       {/* Main content area */}
       <div className='flex items-center justify-center min-h-[calc(100vh-100px)] relative'>
         {/* Background cosmic elements */}
