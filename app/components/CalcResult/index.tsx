@@ -2,17 +2,27 @@ import { Observation } from "@/types/observation";
 
 interface CalculationResultProps {
   calculationResult: Observation | null;
-  backendData: {
+  backendData?: {
     success: boolean;
     time: string;
     value: number;
-  };
+  } | null; 
 }
 
 export const CalculationResult = ({
   calculationResult,
   backendData,
 }: CalculationResultProps) => {
+  if (!backendData) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full space-y-4 w-full">
+        <div className="text-white/60 text-center">
+          Данные расчета не получены
+        </div>
+      </div>
+    );
+  }
+
   const formatTime = (timeStr: string) => {
     const [hours, minutes] = timeStr.split(":").map(Number);
     return `${hours} часов ${minutes} минут`;
@@ -48,7 +58,7 @@ export const CalculationResult = ({
             : "bg-blue-500/30 text-blue-300 border border-blue-500/50"
         }`}
       >
-        {backendData.success ? "НАМ ПИЗДА" : "МОНИТОРИНГ"}
+        {backendData.success ? "КРИТИЧЕСКИЙ УРОВЕНЬ" : "МОНИТОРИНГ"}
       </div>
     </div>
   );

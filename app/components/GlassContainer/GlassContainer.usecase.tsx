@@ -14,7 +14,9 @@ export const FormLayout = () => {
     currentObservation,
     observations,
     calculationResult,
+    backendData,
     errors,
+    isCalculating,
     handleInputChange,
     handlePhotoChange,
     handleSubmit,
@@ -23,13 +25,6 @@ export const FormLayout = () => {
     clearErrors,
     setCurrentObservation,
   } = useObservations();
-
-  // Перенеси сюда backendData
-  const backendData = {
-    success: true, // меняй на true/false для тестирования
-    time: "14:30", // когда success = true
-    value: 42, // когда success = false
-  };
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
@@ -73,14 +68,14 @@ export const FormLayout = () => {
         <GlassContainer
           title="Результат расчета"
           className={`p-4 w-full sm:w-80 h-80 min-w-0 ${
-            backendData.success
+            backendData?.success
               ? "bg-red-500/20 border-2 border-red-500/50"
               : ""
           }`}
         >
           <CalculationResult
             calculationResult={calculationResult}
-            backendData={backendData} // передаем данные в дочерний компонент
+            backendData={backendData} 
           />
         </GlassContainer>
       </div>

@@ -1,3 +1,4 @@
+import { calculateAsteroidImpact } from "@/shared/api/calc/calc";
 import { Observation, ValidationErrors } from "@/types/observation";
 import { useState } from "react";
 
@@ -12,7 +13,13 @@ export const useObservations = () => {
   const [observations, setObservations] = useState<Observation[]>([]);
   const [calculationResult, setCalculationResult] =
     useState<Observation | null>(null);
+  const [backendData, setBackendData] = useState<{
+    success: boolean;
+    time: string;
+    value: number;
+  } | null>(null);
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [isCalculating, setIsCalculating] = useState(false);
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -116,10 +123,41 @@ export const useObservations = () => {
     return false;
   };
 
-  const handleCalculate = () => {
+  const handleCalculate = async () => {
     if (observations.length === 0) return;
-    const lastObs = observations[observations.length - 1];
-    setCalculationResult(lastObs);
+
+    setIsCalculating(true);
+    try {
+      const result = await calculateAsteroidImpact(observations);
+
+      const formattedData = {
+        success: result.success,
+        time: result.closest_approach_jd
+          ? convertJdToTime(result.closest_approach_jd)
+          : "00:00",
+        value: result.closest_distance_au
+          ? Math.round(result.closest_distance_au * 100)
+          : 0,
+      };
+
+      setBackendData(formattedData);
+    } catch (error) {
+      console.error("Error calculating impact:", error);
+      setErrors((prev) => ({
+        ...prev,
+        calculate: "Ошибка при расчете орбиты",
+      }));
+    } finally {
+      setIsCalculating(false);
+    }
+  };
+
+  const convertJdToTime = (jd: number): string => {
+    const hours = Math.floor(jd % 24);
+    const minutes = Math.floor((jd * 60) % 60);
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const handleDeleteObservation = (index: number) => {
@@ -137,7 +175,9 @@ export const useObservations = () => {
     currentObservation,
     observations,
     calculationResult,
+    backendData,
     errors,
+    isCalculating,
     handleInputChange,
     handlePhotoChange,
     handleSubmit,

@@ -3,30 +3,35 @@
 import {useState} from 'react';
 import Link from 'next/link';
 import {useGetStars} from '../../hooks/useGetStars';
+import {Icon} from '../../components/Icon';
+import {useLogin} from '../../hooks/useLogin';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const starsCoordinates = useGetStars();
+  const {login, isLoading} = useLogin();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Здесь будет логика авторизации
-    console.log('Login attempt:', {email, password});
+    try {
+      await login({
+        email,
+        password,
+      });
 
-    // Имитация запроса
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+      // Успешный вход - перенаправляем на главную
+      console.log('Login successful');
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
 
   return (
     <main className='min-h-screen bg-black flex items-center justify-center relative overflow-hidden '>
       {/* Background cosmic elements */}
-
 
       {/* Floating stars/particles */}
       <div className='absolute inset-0 pointer-events-none'>
@@ -73,18 +78,7 @@ export default function LoginPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <svg
-                      className='w-5 h-5 text-gray-text'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'>
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207'
-                      />
-                    </svg>
+                    <Icon name='email' className='text-gray-text' size={20} />
                   </div>
                 </div>
               </div>
@@ -99,27 +93,23 @@ export default function LoginPage() {
                 <div className='relative'>
                   <input
                     id='password'
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className='w-full px-4 py-3 bg-gray-dark border border-gray-light/50 rounded-lg text-white placeholder-gray-text focus:outline-none focus:ring-2 focus:ring-blue-light focus:border-transparent transition-all duration-200'
                     placeholder='••••••••'
                     required
                   />
-                  <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <svg
-                      className='w-5 h-5 text-gray-text'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'>
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'
-                      />
-                    </svg>
-                  </div>
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(!showPassword)}
+                    className='absolute inset-y-0 right-0 pr-3 flex items-center hover:text-blue-light transition-colors duration-200'>
+                    <Icon
+                      name={showPassword ? 'eye-closed' : 'eye-open'}
+                      className='text-gray-text hover:text-blue-light transition-colors duration-200 cursor-pointer'
+                      size={20}
+                    />
+                  </button>
                 </div>
               </div>
 
@@ -127,7 +117,7 @@ export default function LoginPage() {
               <button
                 type='submit'
                 disabled={isLoading}
-                className='w-full bg-blue-light hover:bg-blue-light/80 text-black font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'>
+                className='w-full bg-blue-light hover:bg-blue-light/80 text-white/70 font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'>
                 {isLoading ? (
                   <div className='flex items-center justify-center gap-2'>
                     <div className='w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin'></div>
