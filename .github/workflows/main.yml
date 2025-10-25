@@ -157,7 +157,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            sudo npm install -g pm2
+            npm install -g pm2
             cd /var/www/dlc
             npm ci --production
             pm2 restart dlc || pm2 start npm --name "dlc" -- start
