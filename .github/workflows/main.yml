@@ -88,24 +88,37 @@ jobs:
       - install-cache
       - eslint-check
       - prettier-check
+      - typescript-check
     steps:
       - name: Checkout Commit
         uses: actions/checkout@v5
 
-      - name: Restore npm cache
-        uses: actions/cache@v4
-        id: cache-ci
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Создание env файла
         run: |
           touch .env
           echo NEXT_PUBLIC_API_URL=http://109.120.190.243:8001/api >> .env
           cat .env
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            .next/
+            package.json
+          retention-days: 1
   deploy:
     name: Deploy to Server
     runs-on: ubuntu-latest
@@ -115,8 +128,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: .next
-      - name: Clean
+          path: ./
+
+      - name: Clean server directory
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -125,16 +139,27 @@ jobs:
           script: |
             sudo chown -R ubuntu:ubuntu /var/www/dlc
             sudo rm -rf /var/www/dlc/*
+
       - name: Deploy to server via SCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: '.next/*'
+          source: '.next,package.json'
           target: '/var/www/dlc'
           overwrite: true
-          strip_components: 1
+
+      - name: Install dependencies and start on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/dlc
+            npm ci --production
+            pm2 restart dlc-frontend || pm2 start npm --name "dlc-frontend" -- start
   notify_success:
     name: Success Message
     runs-on: ubuntu-latest
@@ -153,6 +178,7 @@ jobs:
   notify_failure:
     name: Failure Message
     if: ${{ needs.deploy.result == 'failure' }}
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Send Telegram Failure Message
