@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import type {FC} from 'react';
 import {Props} from './Header.props';
 import {SettingsPopup} from '../SettingsPopup';
 import {NotificationPopup} from '../NotificationPopup';
 import {useState, useRef} from 'react';
+import {Icon} from '../Icon';
+import Image from 'next/image';
 
 export const Header: FC<Props> = () => {
   const isLoggedIn = false;
@@ -89,47 +90,23 @@ export const Header: FC<Props> = () => {
           ref={settingsRef}
           onClick={handleSettingsClick}
           className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
-          <Image
-            src='/icons/settings.svg'
-            alt='Settings'
-            width={24}
-            height={24}
-            className='pointer-events-none'
-          />
+          <Icon name='settings' className='text-gray-text' size={24} />
         </div>
         <div
           ref={notificationRef}
           onClick={handleNotificationClick}
           className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 relative flex items-center justify-center z-10'>
-          <Image
-            src='/icons/notification.svg'
-            alt='Notification'
-            width={24}
-            height={24}
-            className='pointer-events-none'
-          />
+          <Icon name='notification' className='text-gray-text' size={24} />
           {/* Индикатор новых уведомлений */}
           <div className='absolute -top-1 -right-1 w-3 h-3 bg-blue-light rounded-full border-2 border-black'></div>
         </div>
         {isLoggedIn ? (
           <div className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
-            <Image
-              src='/icons/emptyUser.svg'
-              alt='User Avatar'
-              width={24}
-              height={24}
-              className='pointer-events-none'
-            />
+            <Icon name='emptyUser' className='text-gray-text' size={24} />
           </div>
         ) : (
           <div className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
-            <Image
-              src='/icons/emptyUser.svg'
-              alt='User Avatar'
-              width={24}
-              height={24}
-              className='pointer-events-none'
-            />
+            <Icon name='emptyUser' className='text-gray-text' size={24} />
           </div>
         )}
       </div>

@@ -74,7 +74,7 @@ export default function LoginPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <Icon name={'email'} className='text-gray-text' size={20} />
+                    <Icon name='email' className='text-gray-text' size={20} />
                   </div>
                 </div>
               </div>

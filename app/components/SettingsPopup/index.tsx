@@ -1,6 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 import {useRouter} from 'next/navigation';
+import {Icon} from '../Icon';
 
 interface SettingsPopupProps {
   isOpen: boolean;
@@ -53,21 +53,21 @@ export const SettingsPopup: React.FC<SettingsPopupProps> = ({isOpen, onClose, po
           <button
             onClick={handleLogin}
             className='w-full px-4 py-3 text-left text-gray-light hover:bg-gray-dark hover:text-white transition-colors duration-200 flex items-center gap-3'>
-            <Image src='/icons/login.svg' alt='Login icon' width={16} height={16} />
+            <Icon name='login' className='text-gray-light' size={16} />
             Войти
           </button>
 
           <button
             onClick={handleProfile}
             className='w-full px-4 py-3 text-left text-gray-light hover:bg-gray-dark hover:text-white transition-colors duration-200 flex items-center gap-3'>
-            <Image src='/icons/profile.svg' alt='Profile icon' width={16} height={16} />
+            <Icon name='profile' className='text-gray-light' size={16} />
             Профиль
           </button>
 
           <button
             onClick={handleSettings}
             className='w-full px-4 py-3 text-left text-gray-light hover:bg-gray-dark hover:text-white transition-colors duration-200 flex items-center gap-3'>
-            <Image src='/icons/settings.svg' alt='Settings icon' width={16} height={16} />
+            <Icon name='settings' className='text-gray-light' size={16} />
             Настройки
           </button>
         </div>

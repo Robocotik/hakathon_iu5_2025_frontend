@@ -1,6 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 import {notificationsUsecase} from './NotificationPopup.usecase';
+import {Icon} from '../Icon';
 
 interface NotificationPopupProps {
   isVisible: boolean;
@@ -16,35 +16,11 @@ export const NotificationPopup: React.FC<NotificationPopupProps> = ({
   const getIconForType = (type: string) => {
     switch (type) {
       case 'measurement':
-        return (
-          <Image
-            src='/icons/activity.svg'
-            alt='Measurement icon'
-            width={16}
-            height={16}
-            className='text-blue-light'
-          />
-        );
+        return <Icon name='activity' className='text-gray-light' size={16} />;
       case 'info':
-        return (
-          <Image
-            src='/icons/info.svg'
-            alt='Info icon'
-            width={16}
-            height={16}
-            className='text-gray-light'
-          />
-        );
+        return <Icon name='info' className='text-gray-light' size={16} />;
       default:
-        return (
-          <Image
-            src='/icons/notification.svg'
-            alt='Notification icon'
-            width={16}
-            height={16}
-            className='text-yellow-400'
-          />
-        );
+        return <Icon name='notification' className='text-yellow-400' size={16} />;
     }
   };
 
@@ -64,13 +40,7 @@ export const NotificationPopup: React.FC<NotificationPopupProps> = ({
         {/* Заголовок */}
         <div className='px-4 py-3 border-b border-gray-light bg-gray-dark'>
           <div className='flex items-center gap-2'>
-            <Image
-              src='/icons/notification.svg'
-              alt='Notifications icon'
-              width={20}
-              height={20}
-              className='text-blue-light'
-            />
+            <Icon name='notification' className='text-blue-light' size={20} />
             <h3 className='text-sm font-medium text-gray-light'>Уведомления</h3>
             <span className='ml-auto text-xs bg-blue-light text-black rounded-full px-2 py-1'>
               {notificationsUsecase.length}
@@ -102,13 +72,7 @@ export const NotificationPopup: React.FC<NotificationPopupProps> = ({
           ) : (
             <div className='px-4 py-6 text-center'>
               <div className='text-gray-text text-sm'>
-                <Image
-                  src='/icons/info.svg'
-                  alt='No notifications'
-                  width={32}
-                  height={32}
-                  className='mx-auto mb-2 text-gray-text/50'
-                />
+                <Icon name='info' className='mx-auto mb-2 text-gray-text/50' size={32} />
                 Нет новых уведомлений
               </div>
             </div>
