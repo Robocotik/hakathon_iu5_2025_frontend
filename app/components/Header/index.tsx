@@ -22,12 +22,38 @@ export const Header: FC<Props> = () => {
 
   // Проверяем токен при монтировании компонента
   useEffect(() => {
-    console.log('authTokenUtils.hasToken()', authTokenUtils.hasToken());
-    if (authTokenUtils.hasToken()) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+    const checkAuth = () => {
+      console.log('Checking auth status...');
+      const hasToken = authTokenUtils.hasToken();
+      console.log('Has token:', hasToken);
+      setIsLoggedIn(hasToken);
+    };
+
+    // Проверяем при загрузке
+    checkAuth();
+
+    // Слушаем изменения localStorage
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'authToken') {
+        console.log('Storage changed, new token:', e.newValue);
+        checkAuth();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Добавляем кастомный обработчик для изменений в том же окне
+    const handleAuthChange = () => {
+      console.log('Auth changed, rechecking...');
+      checkAuth();
+    };
+
+    window.addEventListener('authTokenChanged', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authTokenChanged', handleAuthChange);
+    };
   }, []);
 
   const handleSettingsClick = (event: React.MouseEvent) => {
