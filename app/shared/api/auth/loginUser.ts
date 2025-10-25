@@ -1,12 +1,13 @@
 import {client} from '../axios';
+import {authTokenUtils} from '../../utils/authToken';
 
 export interface LoginCredentials {
-  email: string;
+  login: string;
   password: string;
 }
 
 export interface LoginResponse {
-  token: string;
+  access_token: string;
   user: {
     id: string;
     email: string;
@@ -22,7 +23,15 @@ export const loginUser = async (credentials: LoginCredentials): Promise<LoginRes
       throw new Error('Login failed');
     }
 
-    return res.data;
+    const data = res.data;
+
+    // Сохраняем токен в localStorage после успешного входа
+    if (data.token) {
+      authTokenUtils.setToken(data.token);
+      console.log('Auth token saved to localStorage');
+    }
+
+    return data;
   } catch (error: any) {
     // Проверяем, является ли это ошибкой CORS
     if (error.code === 'ERR_NETWORK') {

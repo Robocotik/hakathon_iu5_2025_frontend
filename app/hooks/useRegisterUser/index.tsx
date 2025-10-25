@@ -10,7 +10,7 @@ export const useRegisterUser = () => {
     mutationFn: registerUser,
     onSuccess: data => {
       // Сохраняем токен в localStorage или cookies
-      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('authToken', data.access_token);
     },
     onError: error => {
       console.error('Registration failed:', error);

@@ -1,5 +1,4 @@
 import {client} from '../axios';
-import type {IUser} from '@/domain/entities/user';
 
 export interface RegisterRequest {
   username: string;
@@ -8,8 +7,7 @@ export interface RegisterRequest {
 }
 
 export interface RegisterResponse {
-  token: string;
-  user: IUser;
+  access_token: string;
 }
 
 export const registerUser = async (userData: RegisterRequest): Promise<RegisterResponse> => {

@@ -6,9 +6,15 @@ interface SettingsPopupProps {
   isOpen: boolean;
   onClose: () => void;
   position: {x: number; y: number};
+  isLoggedIn: boolean;
 }
 
-export const SettingsPopup: React.FC<SettingsPopupProps> = ({isOpen, onClose, position}) => {
+export const SettingsPopup: React.FC<SettingsPopupProps> = ({
+  isOpen,
+  onClose,
+  position,
+  isLoggedIn,
+}) => {
   const router = useRouter();
 
   const handleLogin = () => {
@@ -54,7 +60,7 @@ export const SettingsPopup: React.FC<SettingsPopupProps> = ({isOpen, onClose, po
             onClick={handleLogin}
             className='w-full px-4 py-3 text-left text-gray-light hover:bg-gray-dark hover:text-white transition-colors duration-200 flex items-center gap-3'>
             <Icon name='login' className='text-gray-light' size={16} />
-            Войти
+            {isLoggedIn ? 'Выйти' : 'Войти'}
           </button>
 
           <button

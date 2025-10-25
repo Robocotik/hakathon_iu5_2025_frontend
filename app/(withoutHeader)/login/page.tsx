@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {useGetStars} from '../../hooks/useGetStars';
 import {Icon} from '../../components/Icon';
 import {useLogin} from '../../hooks/useLogin';
+import {useRouter} from 'next/navigation.js';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,18 +16,10 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      await login({
-        email,
-        password,
-      });
-
-      // Успешный вход - перенаправляем на главную
-      console.log('Login successful');
-    } catch (error) {
-      console.error('Login error:', error);
-    }
+    login({
+      login: email,
+      password,
+    });
   };
 
   return (
