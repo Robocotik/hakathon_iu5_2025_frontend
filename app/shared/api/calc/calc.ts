@@ -49,7 +49,7 @@ export const calculateAsteroidImpact = async (
   try {
     const backendObservations = convertToBackendFormat(observations);
 
-    const res = await client.post("/calculations/impact", {
+    const res = await client.post("/calc", {
       observations: backendObservations,
     });
 
