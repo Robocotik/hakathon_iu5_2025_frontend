@@ -41,7 +41,7 @@ export const Header: FC<Props> = () => {
     };
 
     window.addEventListener('storage', handleStorageChange);
-    
+
     // Добавляем кастомный обработчик для изменений в том же окне
     const handleAuthChange = () => {
       console.log('Auth changed, rechecking...');
