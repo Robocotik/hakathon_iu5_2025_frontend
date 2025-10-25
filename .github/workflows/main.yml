@@ -139,7 +139,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             echo "Creating and cleaning /var/www/dlc directory..."
-            sudo mkdir -p /var/www/dlc
             sudo chown -R ubuntu:ubuntu /var/www/dlc
             sudo rm -rf /var/www/dlc/*
             echo "Directory prepared successfully"
