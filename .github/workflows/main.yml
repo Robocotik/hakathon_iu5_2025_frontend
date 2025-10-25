@@ -84,26 +84,83 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: ['install-cache', 'eslint-check', 'prettier-check', 'typescript-check']
+    needs:
+      - install-cache
+      - eslint-check
+      - prettier-check
     steps:
-      - name: Get the repository code
+      - name: Checkout Commit
         uses: actions/checkout@v5
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+
       - name: Restore npm cache
         uses: actions/cache@v4
+        id: cache-ci
         with:
-          path: ~/.npm
-          key: ${{ needs.install-cache.outputs.cache-key }}
-      - name: Install dependencies
-        run: npm ci
-      - name: Run build
-        env:
-          NEXT_TELEMETRY_DISABLED: 1
-          NODE_ENV: production
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Создание env файла
         run: |
-          # Пробуем обычную сборку, если не получается - без Turbopack
-          npm run build || npm run build:no-turbo
+          touch .env
+          echo NEXT_PUBLIC_API_URL=http://109.120.190.243:8001/api >> .env
+          cat .env
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: .next
+      - name: Clean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            sudo chown -R ubuntu:ubuntu /var/www/dlc
+            sudo rm -rf /var/www/dlc/*
+      - name: Deploy to server via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: '.next/*'
+          target: '/var/www/dlc'
+          overwrite: true
+          strip_components: 1
+  notify_success:
+    name: Success Message
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Send Telegram Success Message
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
+            ✅ Изменения успешно задеплоены
+
+            🔗 Ссылка на прод 🔗
+            ${{ secrets.SERVER_HOST || 'Отсутствует' }}
+
+  notify_failure:
+    name: Failure Message
+    if: ${{ needs.deploy.result == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram Failure Message
+        uses: PacificPromise/macos-telegram-action@main
+        with:
+          type: topic
+          message: |
+            ❗️ Произошла ошибка во время деплоя
+
+            🔗 Ссылка на пайплайн 🔗
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
