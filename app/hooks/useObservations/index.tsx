@@ -31,8 +31,7 @@ export const useObservations = () => {
 
       case "sunrise":
         if (!value.trim()) return "Восход обязателен для заполнения";
-        if (!/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value))
-          return "Введите время в формате ЧЧ:ММ";
+        if (!/^-?\d+(\.\d+)?$/.test(value)) return 'Введите восход в формате числа';
         return "";
 
       case "declination":

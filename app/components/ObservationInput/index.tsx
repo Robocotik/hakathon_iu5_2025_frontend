@@ -45,7 +45,7 @@ export const ObservationInput = ({
           name="sunrise"
           value={currentObservation.sunrise}
           onChange={onInputChange}
-          placeholder="Восход (ЧЧ:ММ)"
+          placeholder="Восход (число)"
           className={`${
             errors.sunrise ? "border-red-500" : "border-gray-600/30"
           }`}

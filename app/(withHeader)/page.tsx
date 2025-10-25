@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className='h-full bg-transparent relative overflow-hidden'>
       {/* Main content area */}
-      <div className='flex items-center justify-center min-h-[calc(100vh-105px)] relative'>
+      <div className='flex z-0 items-start justify-center min-h-[calc(100vh-105px)] relative'>
 
         {/* Planet component */}
         <div className="relative z-10">
