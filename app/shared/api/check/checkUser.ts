@@ -1,6 +1,4 @@
-import {client} from '../axios';
-
-export interface CheckRequest {}
+import { client } from '../axios';
 
 export interface CheckResponse {
   user_id: string;

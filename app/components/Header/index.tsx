@@ -1,22 +1,21 @@
 'use client';
 
-import type {FC} from 'react';
-import {Props} from './Header.props';
-import {SettingsPopup} from '../SettingsPopup';
-import {NotificationPopup} from '../NotificationPopup';
-import {useState, useRef, useEffect} from 'react';
-import {Icon} from '../Icon';
+import type { FC } from 'react';
+import { Props } from './Header.props';
+import { SettingsPopup } from '../SettingsPopup';
+import { NotificationPopup } from '../NotificationPopup';
+import { useState, useRef, useEffect } from 'react';
+import { Icon } from '../Icon';
 import Image from 'next/image';
-import {useCheckUser} from '../../hooks/useCheckUser';
-import {authTokenUtils} from '../../shared/utils/authToken';
+import { authTokenUtils } from '../../shared/utils/authToken';
 import Link from 'next/link';
 
 export const Header: FC<Props> = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [popupPosition, setPopupPosition] = useState({x: 0, y: 0});
-  const [notificationPosition, setNotificationPosition] = useState({x: 0, y: 0});
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+  const [notificationPosition, setNotificationPosition] = useState({ x: 0, y: 0 });
   const settingsRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
 

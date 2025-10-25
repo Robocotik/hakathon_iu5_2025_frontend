@@ -1,4 +1,4 @@
-import {authTokenUtils} from '../../utils/authToken';
+import { authTokenUtils } from '../../utils/authToken';
 
 export const logoutUser = () => {
   // Удаляем токен из localStorage

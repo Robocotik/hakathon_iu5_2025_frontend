@@ -1,4 +1,4 @@
-import { client } from "../axios";
+import { client } from '../axios';
 
 export interface Observation {
   time: string;
@@ -39,50 +39,51 @@ export interface BackendResult {
   fullData?: CalculationResponse; // полные данные
 }
 
-const convertToBackendFormat = (
-  observations: Observation[]
-): BackendObservation[] => {
+const convertToBackendFormat = (observations: Observation[]): BackendObservation[] => {
   return observations.map((obs, index) => {
-
     return {
-      ra_hours: parseFloat(obs.time) || 5.2 + index * 0.02, 
-      dec_degrees: parseFloat(obs.declination) || 22.4 + index * 0.05, 
+      ra_hours: parseFloat(obs.time) || 5.2 + index * 0.02,
+      dec_degrees: parseFloat(obs.declination) || 22.4 + index * 0.05,
       timestamp: Math.floor(Date.now() / 1000) + index * 86400,
     };
   });
 };
 
 export const calculateAsteroidImpact = async (
-  observations: Observation[]
+  observations: Observation[],
 ): Promise<CalculationResponse> => {
   try {
     const backendObservations = convertToBackendFormat(observations);
 
-    const res = await client.post("/calc", {
+    const res = await client.post('/calc', {
       observations: backendObservations,
     });
 
     if (res.status >= 300) {
-      throw new Error("Calculation failed");
+      throw new Error('Calculation failed');
     }
 
     return res.data;
-  } catch (error: any) {
-    if (error.code === "ERR_NETWORK") {
-      throw new Error("Ошибка сети. Проверьте подключение к серверу.");
+  } catch (error: unknown) {
+    // Проверяем, является ли это ошибкой axios
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ERR_NETWORK') {
+      throw new Error('Ошибка сети. Проверьте подключение к серверу.');
     }
 
-    if (error.response) {
-      const status = error.response.status;
+    // Проверяем статус ответа
+    if (error && typeof error === 'object' && 'response' in error && error.response) {
+      const response = error.response as { status: number };
+      const status = response.status;
       if (status === 401) {
-        throw new Error("Необходима авторизация");
+        throw new Error('Необходима авторизация');
       } else if (status === 422) {
-        throw new Error("Некорректные данные для расчета");
+        throw new Error('Некорректные данные для расчета');
       } else if (status >= 500) {
-        throw new Error("Ошибка сервера. Попробуйте позже.");
+        throw new Error('Ошибка сервера. Попробуйте позже.');
       }
     }
 
-    throw new Error(error.message || "Произошла ошибка при расчете");
+    const message = error instanceof Error ? error.message : 'Произошла ошибка при расчете';
+    throw new Error(message);
   }
 };

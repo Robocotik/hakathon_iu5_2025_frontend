@@ -6,7 +6,7 @@ interface IconProps {
   size?: number;
 }
 
-export const Icon: React.FC<IconProps> = ({name, className = '', size = 20}) => {
+export const Icon: React.FC<IconProps> = ({ name, className = '', size = 20 }) => {
   const getIconPath = (iconName: string) => {
     switch (iconName) {
       case 'user':

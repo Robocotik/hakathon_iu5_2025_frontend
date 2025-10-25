@@ -44,13 +44,23 @@ body {
 
 /* Glowing shadow effect for navigation links */
 .glow-blue {
-  text-shadow: 0 0 5px #6a8db3, 0 0 10px #6a8db3, 0 0 15px #6a8db3, 0 0 20px #6a8db3;
-  box-shadow: 0 0 10px rgba(106, 141, 179, 0.3), 0 0 20px rgba(106, 141, 179, 0.2),
+  text-shadow:
+    0 0 5px #6a8db3,
+    0 0 10px #6a8db3,
+    0 0 15px #6a8db3,
+    0 0 20px #6a8db3;
+  box-shadow:
+    0 0 10px rgba(106, 141, 179, 0.3),
+    0 0 20px rgba(106, 141, 179, 0.2),
     0 0 30px rgba(106, 141, 179, 0.1);
 }
 
 .glow-underline {
-  box-shadow: 0 0 8px #6a8db3, 0 0 16px #6a8db3, 0 0 24px #6a8db3, 0 2px 0 #6a8db3;
+  box-shadow:
+    0 0 8px #6a8db3,
+    0 0 16px #6a8db3,
+    0 0 24px #6a8db3,
+    0 2px 0 #6a8db3;
 }
 
 /* Planet animations */
@@ -123,5 +133,5 @@ input:-webkit-autofill:active {
 }
 
 input::placeholder {
-  color: #9CA3AF;
+  color: #9ca3af;
 }

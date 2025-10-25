@@ -5,15 +5,15 @@ interface PlanetProps {
   className?: string;
 }
 
-export const Planet: React.FC<PlanetProps> = ({size = 300, className = ''}) => {
+export const Planet: React.FC<PlanetProps> = ({ size = 300, className = '' }) => {
   return (
-    <div className={`relative ${className}`} style={{width: size, height: size}}>
+    <div className={`relative ${className}`} style={{ width: size, height: size }}>
       <svg
         width={size}
         height={size}
         viewBox='0 0 300 300'
         className='animate-spin-slow'
-        style={{animationDuration: '60s'}}>
+        style={{ animationDuration: '60s' }}>
         {/* Gradient definitions */}
         <defs>
           {/* Planet gradient */}
@@ -154,18 +154,33 @@ export const Planet: React.FC<PlanetProps> = ({size = 300, className = ''}) => {
 
       {/* Floating particles around planet */}
       <div className='absolute inset-0 pointer-events-none'>
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className='absolute w-1 h-1 bg-blue-light rounded-full opacity-60 animate-pulse'
-            style={{
-              left: `${20 + Math.random() * 60}%`,
-              top: `${20 + Math.random() * 60}%`,
-              animationDelay: `${i * 0.5}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
-            }}
-          />
-        ))}
+        {[...Array(8)].map((_, i) => {
+          // Фиксированные координаты для частиц планеты
+          const particlePositions = [
+            { left: 25, top: 30 },
+            { left: 75, top: 25 },
+            { left: 45, top: 70 },
+            { left: 65, top: 45 },
+            { left: 35, top: 60 },
+            { left: 80, top: 55 },
+            { left: 20, top: 75 },
+            { left: 55, top: 20 },
+          ];
+          const pos = particlePositions[i] || { left: 50, top: 50 };
+
+          return (
+            <div
+              key={i}
+              className='absolute w-1 h-1 bg-blue-light rounded-full opacity-60 animate-pulse'
+              style={{
+                left: `${pos.left}%`,
+                top: `${pos.top}%`,
+                animationDelay: `${i * 0.5}s`,
+                animationDuration: `${2 + (i % 3)}s`,
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );

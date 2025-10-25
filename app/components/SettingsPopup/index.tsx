@@ -1,12 +1,12 @@
 import React from 'react';
-import {useRouter} from 'next/navigation';
-import {Icon} from '../Icon';
-import {authTokenUtils} from '../../shared/utils/authToken';
+import { useRouter } from 'next/navigation';
+import { Icon } from '../Icon';
+import { authTokenUtils } from '../../shared/utils/authToken';
 
 interface SettingsPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  position: {x: number; y: number};
+  position: { x: number; y: number };
   isLoggedIn: boolean;
 }
 

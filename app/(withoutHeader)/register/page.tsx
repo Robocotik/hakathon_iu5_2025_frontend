@@ -1,10 +1,10 @@
 'use client';
 
-import {useState} from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import {useGetStars} from '../../hooks/useGetStars';
-import {Icon} from '../../components/Icon';
-import {useRegisterUser} from '../../hooks/useRegisterUser';
+import { useGetStars } from '../../hooks/useGetStars';
+import { Icon } from '../../components/Icon';
+import { useRegisterUser } from '../../hooks/useRegisterUser';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ export default function RegisterPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const starsCoordinates = useGetStars();
-  const {register, isLoading: isRegistering} = useRegisterUser();
+  const { register, isLoading: isRegistering } = useRegisterUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({

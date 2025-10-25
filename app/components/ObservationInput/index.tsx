@@ -1,5 +1,5 @@
-import { Input } from "@/components/Input";
-import { Observation, ValidationErrors } from "@/types/observation";
+import { Input } from '@/components/Input';
+import { Observation, ValidationErrors } from '@/types/observation';
 
 interface ObservationInputProps {
   currentObservation: Observation;
@@ -26,69 +26,58 @@ export const ObservationInput = ({
   };
 
   return (
-    <div className="flex flex-col gap-3 h-full">
+    <div className='flex flex-col gap-3 h-full'>
       <div>
         <Input
-          name="time"
+          name='time'
           value={currentObservation.time}
           onChange={onInputChange}
-          placeholder="Время (ЧЧ:ММ)"
-          className={`${errors.time ? "border-red-500" : "border-gray-600/30"}`}
+          placeholder='Время (ЧЧ:ММ)'
+          className={`${errors.time ? 'border-red-500' : 'border-gray-600/30'}`}
         />
-        {errors.time && (
-          <div className="text-red-400 text-xs mt-1">{errors.time}</div>
-        )}
+        {errors.time && <div className='text-red-400 text-xs mt-1'>{errors.time}</div>}
       </div>
 
       <div>
         <Input
-          name="sunrise"
+          name='sunrise'
           value={currentObservation.sunrise}
           onChange={onInputChange}
-          placeholder="Восход (число)"
-          className={`${
-            errors.sunrise ? "border-red-500" : "border-gray-600/30"
-          }`}
+          placeholder='Восход (число)'
+          className={`${errors.sunrise ? 'border-red-500' : 'border-gray-600/30'}`}
         />
-        {errors.sunrise && (
-          <div className="text-red-400 text-xs mt-1">{errors.sunrise}</div>
-        )}
+        {errors.sunrise && <div className='text-red-400 text-xs mt-1'>{errors.sunrise}</div>}
       </div>
 
       <div>
         <Input
-          name="declination"
+          name='declination'
           value={currentObservation.declination}
           onChange={onInputChange}
-          placeholder="Склонение (число)"
-          className={`${
-            errors.declination ? "border-red-500" : "border-gray-600/30"
-          }`}
+          placeholder='Склонение (число)'
+          className={`${errors.declination ? 'border-red-500' : 'border-gray-600/30'}`}
         />
         {errors.declination && (
-          <div className="text-red-400 text-xs mt-1">{errors.declination}</div>
+          <div className='text-red-400 text-xs mt-1'>{errors.declination}</div>
         )}
       </div>
 
       <div>
         <button
-          type="button"
+          type='button'
           onClick={onTriggerFileInput}
           className={`w-full text-left px-3 py-2 bg-gray-700/50 border rounded-lg text-white text-sm hover:bg-gray-600/50 transition ${
-            errors.photo ? "border-red-500" : "border-gray-600"
-          }`}
-        >
-          {currentObservation.photo ? "Фото выбрано" : "Выбрать фото"}
+            errors.photo ? 'border-red-500' : 'border-gray-600'
+          }`}>
+          {currentObservation.photo ? 'Фото выбрано' : 'Выбрать фото'}
         </button>
-        {errors.photo && (
-          <div className="text-red-400 text-xs mt-1">{errors.photo}</div>
-        )}
+        {errors.photo && <div className='text-red-400 text-xs mt-1'>{errors.photo}</div>}
         <input
-          type="file"
+          type='file'
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/*"
-          className="hidden"
+          accept='image/*'
+          className='hidden'
         />
       </div>
     </div>

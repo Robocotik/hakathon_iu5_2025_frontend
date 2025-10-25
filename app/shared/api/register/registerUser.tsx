@@ -1,4 +1,4 @@
-import {client} from '../axios';
+import { client } from '../axios';
 
 export interface RegisterRequest {
   username: string;

@@ -1,5 +1,5 @@
-import {client} from '../axios';
-import {authTokenUtils} from '../../utils/authToken';
+import { client } from '../axios';
+import { authTokenUtils } from '../../utils/authToken';
 
 export interface LoginCredentials {
   login: string;
@@ -32,15 +32,16 @@ export const loginUser = async (credentials: LoginCredentials): Promise<LoginRes
     }
 
     return data;
-  } catch (error: any) {
-    // Проверяем, является ли это ошибкой CORS
-    if (error.code === 'ERR_NETWORK') {
+  } catch (error: unknown) {
+    // Проверяем, является ли это ошибкой axios
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ERR_NETWORK') {
       throw new Error('Ошибка сети. Проверьте подключение к серверу.');
     }
 
     // Проверяем статус ответа
-    if (error.response) {
-      const status = error.response.status;
+    if (error && typeof error === 'object' && 'response' in error && error.response) {
+      const response = error.response as { status: number };
+      const status = response.status;
       if (status === 401) {
         throw new Error('Неверный email или пароль');
       } else if (status === 422) {
@@ -50,6 +51,7 @@ export const loginUser = async (credentials: LoginCredentials): Promise<LoginRes
       }
     }
 
-    throw new Error(error.message || 'Произошла ошибка при входе');
+    const message = error instanceof Error ? error.message : 'Произошла ошибка при входе';
+    throw new Error(message);
   }
 };

@@ -1,10 +1,10 @@
 import React from 'react';
-import {notificationsUsecase} from './NotificationPopup.usecase';
-import {Icon} from '../Icon';
+import { notificationsUsecase } from './NotificationPopup.usecase';
+import { Icon } from '../Icon';
 
 interface NotificationPopupProps {
   isVisible: boolean;
-  position: {x: number; y: number};
+  position: { x: number; y: number };
   onClose: () => void;
 }
 
@@ -51,7 +51,7 @@ export const NotificationPopup: React.FC<NotificationPopupProps> = ({
         {/* Список уведомлений */}
         <div className='max-h-64 overflow-y-auto'>
           {notificationsUsecase.length > 0 ? (
-            notificationsUsecase.map(notification => (
+            notificationsUsecase.map((notification) => (
               <div
                 key={notification.id}
                 className='px-4 py-3 border-b border-gray-light/30 hover:bg-gray-dark/50 transition-colors duration-200 cursor-pointer'>

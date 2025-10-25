@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {authTokenUtils} from '../utils/authToken';
+import { authTokenUtils } from '../utils/authToken';
 
 export const client = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -14,8 +14,8 @@ export const client = axios.create({
 
 // Интерцептор для обработки ошибок CORS и авторизации
 client.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     console.error('API Error: ', error);
 
     // Обработка ошибок авторизации
@@ -40,7 +40,7 @@ client.interceptors.response.use(
 
 // Интерцептор для логирования запросов и добавления токена
 client.interceptors.request.use(
-  config => {
+  (config) => {
     console.log('Making request to:', `${config.baseURL || ''}${config.url || ''}`);
 
     // Добавляем Authorization токен из localStorage
@@ -52,7 +52,7 @@ client.interceptors.request.use(
 
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   },
 );

@@ -1,7 +1,5 @@
-import {useQuery} from '@tanstack/react-query';
-import {useEffect} from 'react';
-import {type CheckResponse, checkUser} from '../../shared/api/check/checkUser';
-import {authTokenUtils} from '../../shared/utils/authToken';
+import { useQuery } from '@tanstack/react-query';
+import { type CheckResponse, checkUser } from '../../shared/api/check/checkUser';
 
 export const useCheckUser = () => {
   const query = useQuery<CheckResponse, Error>({

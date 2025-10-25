@@ -1,4 +1,4 @@
-import {useMutation} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   registerUser,
   type RegisterRequest,
@@ -8,11 +8,11 @@ import {
 export const useRegisterUser = () => {
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: registerUser,
-    onSuccess: data => {
+    onSuccess: (data) => {
       // Сохраняем токен в localStorage или cookies
       localStorage.setItem('authToken', data.access_token);
     },
-    onError: error => {
+    onError: (error) => {
       console.error('Registration failed:', error);
     },
   });

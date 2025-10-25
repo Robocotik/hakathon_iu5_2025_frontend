@@ -7,7 +7,6 @@ export const authTokenUtils = {
     return localStorage.getItem('authToken');
   },
 
-  
   setToken: (token: string): void => {
     if (typeof window === 'undefined') return;
     localStorage.setItem('authToken', token);

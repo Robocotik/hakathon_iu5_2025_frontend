@@ -8,5 +8,5 @@ export interface NotificationData {
 
 export interface NotificationPopupProps {
   isVisible: boolean;
-  position: {x: number; y: number};
+  position: { x: number; y: number };
 }

@@ -84,8 +84,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs:
-      ['install-cache', 'eslint-check', 'prettier-check', 'typescript-check']
+    needs: ['install-cache', 'eslint-check', 'prettier-check', 'typescript-check']
     steps:
       - name: Get the repository code
         uses: actions/checkout@v5
