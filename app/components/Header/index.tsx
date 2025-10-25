@@ -92,7 +92,7 @@ export const Header: FC<Props> = () => {
     <header className='w-full flex items-center justify-between p-4 bg-transparent relative z-50'>
       <Link
         href='/'
-        className='h-18 w-32 cursor-pointer shadow-2xl hover:shadow-white/15 hover:shadow-md transition-shadow duration-300 relative z-10'>
+        className='h-12 w-16 cursor-pointer shadow-2xl hover:shadow-white/15 hover:shadow-md transition-shadow duration-300 relative z-10'>
         <Image
           className='h-full w-full pointer-events-none'
           src='/icons/logo.svg'

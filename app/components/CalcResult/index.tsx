@@ -16,7 +16,7 @@ export const CalculationResult = ({
   if (!backendData) {
     return (
       <div className="flex flex-col items-center justify-center h-full space-y-4 w-full">
-        <div className="text-white/60 text-center">
+        <div className="text-white/60 text-center text-sm">
           Данные расчета не получены
         </div>
       </div>
