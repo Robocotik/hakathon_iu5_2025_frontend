@@ -11,6 +11,7 @@ export default function Home() {
       <div className='flex z-0 items-start justify-center min-h-[calc(100vh-105px)] relative'>
         {/* Planet component */}
         <div className='relative z-10'>
+          ПЛАНЕТА АХАХХАХАХАХ
           <Planet size={250} className='drop-shadow-2xl' />
         </div>
 
