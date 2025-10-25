@@ -2,8 +2,8 @@
 
 import {useState} from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import {useGetStars} from '../../hooks/useGetStars';
+import {Icon} from '../../components/Icon';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -45,7 +45,7 @@ export default function RegisterPage() {
   return (
     <main className='min-h-screen bg-black relative overflow-hidden'>
       {/* Background cosmic elements */}
-      <div className='absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/10 to-black'></div>
+      <div className='absolute inset-0 bg-linear-to-br from-blue-900/20 via-purple-900/10 to-black'></div>
 
       {/* Floating stars/particles */}
       <div className='absolute inset-0 pointer-events-none'>
@@ -93,13 +93,7 @@ export default function RegisterPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <Image
-                      src='/icons/user.svg'
-                      alt='User icon'
-                      width={20}
-                      height={20}
-                      className='text-gray-text'
-                    />
+                    <Icon name='user' className='text-gray-text' size={20} />
                   </div>
                 </div>
               </div>
@@ -121,13 +115,7 @@ export default function RegisterPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <Image
-                      src='/icons/email.svg'
-                      alt='Email icon'
-                      width={20}
-                      height={20}
-                      className='text-gray-text'
-                    />
+                    <Icon name='email' className='text-gray-text' size={20} />
                   </div>
                 </div>
               </div>
@@ -154,12 +142,10 @@ export default function RegisterPage() {
                     type='button'
                     onClick={() => setShowPassword(!showPassword)}
                     className='absolute inset-y-0 right-0 pr-3 flex items-center hover:text-blue-light transition-colors duration-200'>
-                    <Image
-                      src={showPassword ? '/icons/eye-closed.svg' : '/icons/eye-open.svg'}
-                      alt={showPassword ? 'Hide password' : 'Show password'}
-                      width={20}
-                      height={20}
-                      className='text-gray-text'
+                    <Icon
+                      name={showPassword ? 'eye-closed' : 'eye-open'}
+                      className='text-gray-text cursor-pointer'
+                      size={20}
                     />
                   </button>
                 </div>
@@ -184,13 +170,7 @@ export default function RegisterPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <Image
-                      src='/icons/check-circle.svg'
-                      alt='Check icon'
-                      width={20}
-                      height={20}
-                      className='text-gray-text'
-                    />
+                    <Icon name='check-circle' className='text-gray-text' size={20} />
                   </div>
                 </div>
               </div>
@@ -200,7 +180,7 @@ export default function RegisterPage() {
                 <input
                   id='terms'
                   type='checkbox'
-                  className='mt-1 w-4 h-4 text-blue-light bg-gray-dark border-gray-light rounded focus:ring-blue-light focus:ring-2'
+                  className='mt-1 cursor-pointer w-4 h-4 text-blue-light bg-gray-dark border-gray-light rounded focus:ring-blue-light focus:ring-2'
                   required
                 />
                 <label htmlFor='terms' className='text-sm text-gray-text'>
@@ -223,7 +203,7 @@ export default function RegisterPage() {
               <button
                 type='submit'
                 disabled={isLoading}
-                className='w-full bg-blue-light hover:bg-blue-light/80 text-black font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'>
+                className='w-full bg-blue-light hover:bg-blue-light/80 text-white/70 font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer'>
                 {isLoading ? (
                   <div className='flex items-center justify-center gap-2'>
                     <div className='w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin'></div>

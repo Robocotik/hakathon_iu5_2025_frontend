@@ -2,13 +2,14 @@
 
 import {useState} from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import {useGetStars} from '../../hooks/useGetStars';
+import {Icon} from '../../components/Icon';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const starsCoordinates = useGetStars();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,13 +74,7 @@ export default function LoginPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <Image
-                      src='/icons/email.svg'
-                      alt='Email icon'
-                      width={20}
-                      height={20}
-                      className='text-gray-text'
-                    />
+                    <Icon name={'email'} className='text-gray-text' size={20} />
                   </div>
                 </div>
               </div>
@@ -94,22 +89,23 @@ export default function LoginPage() {
                 <div className='relative'>
                   <input
                     id='password'
-                    type='password'
+                    type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     className='w-full px-4 py-3 bg-gray-dark border border-gray-light/50 rounded-lg text-white placeholder-gray-text focus:outline-none focus:ring-2 focus:ring-blue-light focus:border-transparent transition-all duration-200'
                     placeholder='••••••••'
                     required
                   />
-                  <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <Image
-                      src='/icons/lock.svg'
-                      alt='Lock icon'
-                      width={20}
-                      height={20}
-                      className='text-gray-text'
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(!showPassword)}
+                    className='absolute inset-y-0 right-0 pr-3 flex items-center hover:text-blue-light transition-colors duration-200'>
+                    <Icon
+                      name={showPassword ? 'eye-closed' : 'eye-open'}
+                      className='text-gray-text hover:text-blue-light transition-colors duration-200 cursor-pointer'
+                      size={20}
                     />
-                  </div>
+                  </button>
                 </div>
               </div>
 
@@ -117,7 +113,7 @@ export default function LoginPage() {
               <button
                 type='submit'
                 disabled={isLoading}
-                className='w-full bg-blue-light hover:bg-blue-light/80 text-black font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'>
+                className='w-full bg-blue-light hover:bg-blue-light/80 text-white/70 font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none'>
                 {isLoading ? (
                   <div className='flex items-center justify-center gap-2'>
                     <div className='w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin'></div>

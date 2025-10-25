@@ -2,11 +2,9 @@ import {Planet} from '../components/Planet';
 
 export default function Home() {
   return (
-    <main className='min-h-screen bg-black relative overflow-hidden'>
+    <main className='min-h-screen bg-transparent relative overflow-hidden'>
       {/* Main content area */}
       <div className='flex items-center justify-center min-h-[calc(100vh-100px)] relative'>
-        {/* Background cosmic elements */}
-        <div className='absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/10 to-black'></div>
 
         {/* Planet component */}
         <div className='relative z-10'>

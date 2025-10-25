@@ -18,6 +18,7 @@ export const Header: FC<Props> = () => {
   const notificationRef = useRef<HTMLDivElement>(null);
 
   const handleSettingsClick = (event: React.MouseEvent) => {
+    console.log('Settings clicked!'); // Для отладки
     event.stopPropagation();
     if (settingsRef.current) {
       const rect = settingsRef.current.getBoundingClientRect();
@@ -49,16 +50,18 @@ export const Header: FC<Props> = () => {
     setIsNotificationOpen(false);
   };
   return (
-    <header className='w-full flex items-center justify-between p-4 bg-black '>
-      <div className='h-18 w-32 cursor-pointer shadow-2xl hover:shadow-white/15 hover:shadow-md transition-shadow duration-300'>
+    <header className='w-full flex items-center justify-between p-4 bg-transparent relative z-50'>
+      <Link
+        href='/'
+        className='h-18 w-32 cursor-pointer shadow-2xl hover:shadow-white/15 hover:shadow-md transition-shadow duration-300 relative z-10'>
         <Image
-          className='h-full w-full'
+          className='h-full w-full pointer-events-none'
           src='/icons/logo.svg'
           alt='Logo'
           width={100}
           height={100}
         />
-      </div>
+      </Link>
 
       <nav className='flex gap-4 items-center'>
         <Link
@@ -81,28 +84,52 @@ export const Header: FC<Props> = () => {
         </Link>
       </nav>
 
-      <div className='flex gap-4 items-center'>
+      <div className='flex gap-4 items-center relative z-10'>
         <div
           ref={settingsRef}
           onClick={handleSettingsClick}
-          className='rounded-full p-3  transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70'>
-          <Image src='/icons/settings.svg' alt='Settings' width={50} height={50} />
+          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
+          <Image
+            src='/icons/settings.svg'
+            alt='Settings'
+            width={24}
+            height={24}
+            className='pointer-events-none'
+          />
         </div>
         <div
           ref={notificationRef}
           onClick={handleNotificationClick}
-          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 relative'>
-          <Image src='/icons/notification.svg' alt='Notification' width={50} height={50} />
+          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 relative flex items-center justify-center z-10'>
+          <Image
+            src='/icons/notification.svg'
+            alt='Notification'
+            width={24}
+            height={24}
+            className='pointer-events-none'
+          />
           {/* Индикатор новых уведомлений */}
           <div className='absolute -top-1 -right-1 w-3 h-3 bg-blue-light rounded-full border-2 border-black'></div>
         </div>
         {isLoggedIn ? (
-          <div className='rounded-full p-4  transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70'>
-            <Image src='/icons/emptyUser.svg' alt='User Avatar' width={50} height={50} />
+          <div className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
+            <Image
+              src='/icons/emptyUser.svg'
+              alt='User Avatar'
+              width={24}
+              height={24}
+              className='pointer-events-none'
+            />
           </div>
         ) : (
-          <div className='rounded-full p-4  transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70'>
-            <Image src='/icons/emptyUser.svg' alt='User Avatar' width={50} height={50} />
+          <div className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
+            <Image
+              src='/icons/emptyUser.svg'
+              alt='User Avatar'
+              width={24}
+              height={24}
+              className='pointer-events-none'
+            />
           </div>
         )}
       </div>
