@@ -137,8 +137,11 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            echo "Creating and cleaning /var/www/dlc directory..."
+            sudo mkdir -p /var/www/dlc
             sudo chown -R ubuntu:ubuntu /var/www/dlc
             sudo rm -rf /var/www/dlc/*
+            echo "Directory prepared successfully"
 
       - name: Deploy to server via SCP
         uses: appleboy/scp-action@master
@@ -157,10 +160,31 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            # Проверяем и устанавливаем Node.js если его нет
+            if ! command -v node &> /dev/null; then
+              echo "Installing Node.js..."
+              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # Проверяем версию Node.js
+            echo "Node.js version: $(node --version)"
+            echo "NPM version: $(npm --version)"
+
+            # Устанавливаем PM2 глобально
             npm install -g pm2
+
+            # Переходим в папку проекта
             cd /var/www/dlc
+
+            # Устанавливаем production зависимости
             npm ci --production
+
+            # Перезапускаем или создаем PM2 процесс
             pm2 restart dlc || pm2 start npm --name "dlc" -- start
+
+            # Показываем статус PM2
+            pm2 list
   notify_success:
     name: Success Message
     runs-on: ubuntu-latest
