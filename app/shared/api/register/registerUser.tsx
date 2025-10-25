@@ -2,7 +2,7 @@ import {client} from '../axios';
 import type {IUser} from '@/domain/entities/user';
 
 export interface RegisterRequest {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }
@@ -13,7 +13,7 @@ export interface RegisterResponse {
 }
 
 export const registerUser = async (userData: RegisterRequest): Promise<RegisterResponse> => {
-  const res = await client.post('/register', userData);
+  const res = await client.post('/auth/register', userData);
 
   if (res.status >= 300) {
     throw new Error('Registration failed');

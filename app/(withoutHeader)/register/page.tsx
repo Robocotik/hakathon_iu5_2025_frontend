@@ -4,6 +4,7 @@ import {useState} from 'react';
 import Link from 'next/link';
 import {useGetStars} from '../../hooks/useGetStars';
 import {Icon} from '../../components/Icon';
+import {useRegisterUser} from '../../hooks/useRegisterUser';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -12,9 +13,10 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
   });
-  const [isLoading, setIsLoading] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const starsCoordinates = useGetStars();
+  const {register, isLoading: isRegistering} = useRegisterUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -30,16 +32,11 @@ export default function RegisterPage() {
       alert('Пароли не совпадают');
       return;
     }
-
-    setIsLoading(true);
-
-    // Здесь будет логика регистрации
-    console.log('Registration attempt:', formData);
-
-    // Имитация запроса
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+    register({
+      username: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
   };
 
   return (
@@ -202,9 +199,9 @@ export default function RegisterPage() {
               {/* Submit Button */}
               <button
                 type='submit'
-                disabled={isLoading}
+                disabled={isRegistering}
                 className='w-full bg-blue-light hover:bg-blue-light/80 text-white/70 font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer'>
-                {isLoading ? (
+                {isRegistering ? (
                   <div className='flex items-center justify-center gap-2'>
                     <div className='w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin'></div>
                     Создание аккаунта...

@@ -4,25 +4,29 @@ import {useState} from 'react';
 import Link from 'next/link';
 import {useGetStars} from '../../hooks/useGetStars';
 import {Icon} from '../../components/Icon';
+import {useLogin} from '../../hooks/useLogin';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const starsCoordinates = useGetStars();
+  const {login, isLoading} = useLogin();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Здесь будет логика авторизации
-    console.log('Login attempt:', {email, password});
+    try {
+      await login({
+        email,
+        password,
+      });
 
-    // Имитация запроса
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+      // Успешный вход - перенаправляем на главную
+      console.log('Login successful');
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
 
   return (
