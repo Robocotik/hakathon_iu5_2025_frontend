@@ -30,6 +30,15 @@ export interface CalculationResponse {
   closest_distance_au?: number;
 }
 
+// Обнови тип для backendData
+export interface BackendResult {
+  success: boolean;
+  error: string;
+  time?: string; // для отображения
+  value?: number; // для отображения
+  fullData?: CalculationResponse; // полные данные
+}
+
 const convertToBackendFormat = (
   observations: Observation[]
 ): BackendObservation[] => {
