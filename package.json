@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:ci": "npm rebuild lightningcss --optional && next build",
     "start": "next start",
     "lint": "eslint",
     "prettier:fix": "prettier --write .",
@@ -26,6 +27,7 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
+    "lightningcss": "^1.27.0",
     "postcss": "^8.4.31",
     "prettier": "^3.6.2",
     "tailwindcss": "^4",
