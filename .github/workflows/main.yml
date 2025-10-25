@@ -134,20 +134,17 @@ jobs:
               pm2 delete dlc || echo "PM2 process 'dlc' not found"
             fi
 
-            sudo rm -rf /var/www/dlc/*
+            # Полностью очищаем папку и создаем заново
+            sudo rm -rf /var/www/dlc
+            sudo mkdir -p /var/www/dlc
             sudo chown -R ubuntu:ubuntu /var/www/dlc
 
-            # Переходим в папку и клонируем/обновляем репозиторий
+            # Переходим в папку и клонируем репозиторий
             cd /var/www/dlc
-
             git clone -b sasha https://github.com/Robocotik/hakathon_iu5_2025_frontend.git .
-
-            sudo chown -R ubuntu:ubuntu /var/www/dlc
-            fi
 
             # Создание env файла
             echo "Creating .env file..."
-
             touch .env
             echo NEXT_PUBLIC_API_URL=http://109.120.190.243:8001/api >> .env
 
