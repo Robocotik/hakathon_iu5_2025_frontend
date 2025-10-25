@@ -7,7 +7,7 @@ export const authTokenUtils = {
     return localStorage.getItem('authToken');
   },
 
-  // Сохранить токен в localStorage
+  
   setToken: (token: string): void => {
     if (typeof window === 'undefined') return;
     localStorage.setItem('authToken', token);
@@ -17,10 +17,15 @@ export const authTokenUtils = {
   removeToken: (): void => {
     if (typeof window === 'undefined') return;
     localStorage.removeItem('authToken');
+    const remainingToken = localStorage.getItem('authToken');
+    if (remainingToken) {
+      localStorage.clear();
+    }
   },
 
   // Проверить, есть ли токен
   hasToken: (): boolean => {
+    if (typeof window === 'undefined') return false;
     return !!authTokenUtils.getToken();
   },
 

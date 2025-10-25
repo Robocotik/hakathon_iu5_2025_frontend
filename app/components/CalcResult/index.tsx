@@ -18,8 +18,10 @@ export const CalculationResult = ({
 }: CalculationResultProps) => {
   if (!backendData) {
     return (
-      <div className="text-white/60 text-center py-4 h-full flex items-center justify-center">
-        Данные расчета не получены
+      <div className="flex flex-col items-center justify-center h-full space-y-4 w-full">
+        <div className="text-white/60 text-center text-sm">
+          Данные расчета не получены
+        </div>
       </div>
     );
   }

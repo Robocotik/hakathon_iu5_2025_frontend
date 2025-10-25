@@ -1,6 +1,7 @@
 import React from 'react';
 import {useRouter} from 'next/navigation';
 import {Icon} from '../Icon';
+import {authTokenUtils} from '../../shared/utils/authToken';
 
 interface SettingsPopupProps {
   isOpen: boolean;
@@ -18,8 +19,17 @@ export const SettingsPopup: React.FC<SettingsPopupProps> = ({
   const router = useRouter();
 
   const handleLogin = () => {
-    // Переход на страницу логина
-    router.push('/login');
+    if (isLoggedIn) {
+      // Выходим из аккаунта
+      console.log('Logging out user');
+      authTokenUtils.removeToken();
+      console.log('Token after logout:', authTokenUtils.getToken());
+      // Перезагружаем страницу для обновления состояния
+      window.location.reload();
+    } else {
+      // Переход на страницу логина
+      router.push('/login');
+    }
     onClose();
   };
 

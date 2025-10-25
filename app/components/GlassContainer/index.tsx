@@ -19,14 +19,14 @@ export const GlassContainer = ({
     >
       {title && (
         <div className="pr-10 border-b border-gray-600/30 pb-3 mb-4">
-          <h2 className="text-white text-lg font-semibold">{title}</h2>
+          <h2 className="text-white text-md font-semibold">{title}</h2>
         </div>
       )}
 
       {onArrowClick && (
         <button
           onClick={onArrowClick}
-          className="absolute top-3 right-3 w-8 h-8 bg-gray-900/80 backdrop-blur-sm border border-gray-500/30 rounded-full flex items-center justify-center hover:bg-gray-700/80 transition-colors duration-200"
+          className="absolute cursor-pointer top-3 right-3 w-8 h-8 bg-gray-900/80 backdrop-blur-sm border border-gray-500/30 rounded-full flex items-center justify-center hover:bg-gray-700/80 transition-colors duration-200"
         >
           <svg
             width="16"
