@@ -24,6 +24,9 @@
   --color-gray-text: #5b5f62;
 
   --color-blue-light: #6a8db3;
+  --shadow-center-md: 0px 0px 10px 10px #white/20;
+  /* --shadow-color-glow-blue: 0 0 5px 5px #6a8db320; */
+  /* --shadow-glow-underline: 0 0 8px #6a8db3, 0 0 16px #6a8db3, 0 0 24px #6a8db3, 0 2px 0 #6a8db3; */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,4 +40,54 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Glowing shadow effect for navigation links */
+.glow-blue {
+  text-shadow: 0 0 5px #6a8db3, 0 0 10px #6a8db3, 0 0 15px #6a8db3, 0 0 20px #6a8db3;
+  box-shadow: 0 0 10px rgba(106, 141, 179, 0.3), 0 0 20px rgba(106, 141, 179, 0.2),
+    0 0 30px rgba(106, 141, 179, 0.1);
+}
+
+.glow-underline {
+  box-shadow: 0 0 8px #6a8db3, 0 0 16px #6a8db3, 0 0 24px #6a8db3, 0 2px 0 #6a8db3;
+}
+
+/* Planet animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 60s linear infinite;
+}
+
+/* Logo hover shadow effect */
+.logo-hover-shadow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.logo-hover-shadow:hover {
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.3);
+}
+
+/* Popup animation */
+@keyframes popup-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-popup {
+  animation: popup-in 0.2s ease-out;
 }
