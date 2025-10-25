@@ -1,83 +1,75 @@
 name: Test DLC Frontend CI
 on: [push, workflow_dispatch, pull_request]
 jobs:
-  telegram-notify:
-    name: Send Telegram notification
-    runs-on: ubuntu-latest
-    steps:
-      - name: send telegram message on push
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
-            Repository: ${{ github.repository }}
-            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
   install-cache:
     name: Install cache
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache-ci.outputs.key }}
     steps:
-      - name: Get the repository code
+      - name: Checkout Commit
         uses: actions/checkout@v5
-      - name: Set cache key
-        id: cache-ci
-        run: echo "key=node-modules-${{ hashFiles('**/package-lock.json') }}" >> $GITHUB_OUTPUT
 
-      - name: Cache ci dependencies
+      - name: Cache npm dependencies
+        id: cache-ci
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ steps.cache-ci.outputs.key }}
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Install Dependencies
+        if: steps.cache-ci.outputs.cache-hit != 'true'
+        run: npm ci
   eslint-check:
     name: Eslint check
     runs-on: ubuntu-latest
-    needs: ['install-cache']
+    needs: install-cache
     steps:
-      - name: Get the repository code
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
       - name: Restore npm cache
         uses: actions/cache@v4
+        id: cache-ci
         with:
-          path: ~/.npm
-          key: ${{ needs.install-cache.outputs.cache-key }}
-      - name: Install dependencies
-        run: npm ci
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Run eslint check
         run: npm run eslint:fix
+
   prettier-check:
     name: Prettier check
     runs-on: ubuntu-latest
-    needs: ['install-cache']
+    needs: install-cache
     steps:
-      - name: Get the repository code
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
       - name: Restore npm cache
         uses: actions/cache@v4
+        id: cache-ci
         with:
-          path: ~/.npm
-          key: ${{ needs.install-cache.outputs.cache-key }}
-      - name: Install dependencies
-        run: npm ci
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Run prettier fix
         run: npm run prettier:fix
+
   typescript-check:
     name: TypeScript check
-    needs: ['install-cache']
+    needs: install-cache
     runs-on: ubuntu-latest
     steps:
-      - name: Get the repository code
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
       - name: Restore npm cache
         uses: actions/cache@v4
+        id: cache-ci
         with:
-          path: ~/.npm
-          key: ${{ needs.install-cache.outputs.cache-key }}
-      - name: Install dependencies
-        run: npm ci
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Run TypeScript check
         run: npm run ts:check
 
@@ -93,14 +85,14 @@ jobs:
       - name: Checkout Commit
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        id: cache-ci
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Создание env файла
         run: |
@@ -111,12 +103,12 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload build artifacts
+      - name: Save build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-output
           path: |
-            .next/
+            .next
             package.json
             package-lock.json
           retention-days: 1
@@ -138,10 +130,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            echo "Creating and cleaning /var/www/dlc directory..."
             sudo chown -R ubuntu:ubuntu /var/www/dlc
             sudo rm -rf /var/www/dlc/*
-            echo "Directory prepared successfully"
 
       - name: Deploy to server via SCP
         uses: appleboy/scp-action@master
@@ -160,37 +150,20 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            # Проверяем и устанавливаем Node.js если его нет
-            if ! command -v node &> /dev/null; then
-              echo "Installing Node.js..."
-              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-              sudo apt-get install -y nodejs
+            # Устанавливаем PM2 если его нет
+            if ! command -v pm2 &> /dev/null; then
+              sudo npm install -g pm2
             fi
-
-            # Проверяем версию Node.js
-            echo "Node.js version: $(node --version)"
-            echo "NPM version: $(npm --version)"
-
-            # Устанавливаем PM2 глобально с sudo
-            sudo npm install -g pm2
 
             # Переходим в папку проекта
             cd /var/www/dlc
 
-            # Проверяем наличие package-lock.json
-            if [ ! -f "package-lock.json" ]; then
-              echo "package-lock.json not found, running npm install instead of npm ci"
-              npm install --production
-            else
-              echo "Found package-lock.json, running npm ci"
-              npm ci --production
-            fi
+            # Устанавливаем зависимости
+            npm ci --production
 
-            # Перезапускаем или создаем PM2 процесс
+            # Перезапускаем приложение
             pm2 restart dlc || pm2 start npm --name "dlc" -- start
-
-            # Показываем статус PM2
-            pm2 list
+            pm2 save
   notify_success:
     name: Success Message
     runs-on: ubuntu-latest
