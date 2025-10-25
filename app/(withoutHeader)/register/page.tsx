@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {useGetStars} from '../../hooks/useGetStars';
 
 export default function RegisterPage() {
@@ -92,18 +93,13 @@ export default function RegisterPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <svg
-                      className='w-5 h-5 text-gray-text'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'>
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
-                      />
-                    </svg>
+                    <Image
+                      src='/icons/user.svg'
+                      alt='User icon'
+                      width={20}
+                      height={20}
+                      className='text-gray-text'
+                    />
                   </div>
                 </div>
               </div>
@@ -125,18 +121,13 @@ export default function RegisterPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <svg
-                      className='w-5 h-5 text-gray-text'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'>
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207'
-                      />
-                    </svg>
+                    <Image
+                      src='/icons/email.svg'
+                      alt='Email icon'
+                      width={20}
+                      height={20}
+                      className='text-gray-text'
+                    />
                   </div>
                 </div>
               </div>
@@ -163,39 +154,13 @@ export default function RegisterPage() {
                     type='button'
                     onClick={() => setShowPassword(!showPassword)}
                     className='absolute inset-y-0 right-0 pr-3 flex items-center hover:text-blue-light transition-colors duration-200'>
-                    {showPassword ? (
-                      <svg
-                        className='w-5 h-5 text-gray-text'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.81 6.81m0 0L3.74 3.74m0 0L12 12m0 0l8.26 8.26M3.74 3.74L12 12'
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className='w-5 h-5 text-gray-text'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'>
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
-                        />
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          strokeWidth={2}
-                          d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
-                        />
-                      </svg>
-                    )}
+                    <Image
+                      src={showPassword ? '/icons/eye-closed.svg' : '/icons/eye-open.svg'}
+                      alt={showPassword ? 'Hide password' : 'Show password'}
+                      width={20}
+                      height={20}
+                      className='text-gray-text'
+                    />
                   </button>
                 </div>
               </div>
@@ -219,18 +184,13 @@ export default function RegisterPage() {
                     required
                   />
                   <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
-                    <svg
-                      className='w-5 h-5 text-gray-text'
-                      fill='none'
-                      stroke='currentColor'
-                      viewBox='0 0 24 24'>
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-                      />
-                    </svg>
+                    <Image
+                      src='/icons/check-circle.svg'
+                      alt='Check icon'
+                      width={20}
+                      height={20}
+                      className='text-gray-text'
+                    />
                   </div>
                 </div>
               </div>
