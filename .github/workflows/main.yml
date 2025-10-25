@@ -157,9 +157,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            sudo npm install -g pm2
             cd /var/www/dlc
             npm ci --production
-            pm2 restart dlc-frontend || pm2 start npm --name "dlc-frontend" -- start
+            pm2 restart dlc || pm2 start npm --name "dlc" -- start
   notify_success:
     name: Success Message
     runs-on: ubuntu-latest
