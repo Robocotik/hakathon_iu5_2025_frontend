@@ -1,4 +1,4 @@
-import { calculateAsteroidImpact } from "@/shared/api/calc/calc";
+import { calculateAsteroidImpact, CalculationResponse } from "@/shared/api/calc/calc";
 import { Observation, ValidationErrors } from "@/types/observation";
 import { useState } from "react";
 
@@ -15,8 +15,10 @@ export const useObservations = () => {
     useState<Observation | null>(null);
   const [backendData, setBackendData] = useState<{
     success: boolean;
+    error: string; // добавляем error
     time: string;
     value: number;
+    fullData?: CalculationResponse;
   } | null>(null);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isCalculating, setIsCalculating] = useState(false);
@@ -131,21 +133,26 @@ export const useObservations = () => {
 
       const formattedData = {
         success: result.success,
+        error: result.error || "", // добавляем error
         time: result.closest_approach_jd
           ? convertJdToTime(result.closest_approach_jd)
           : "00:00",
         value: result.closest_distance_au
           ? Math.round(result.closest_distance_au * 100)
           : 0,
+        fullData: result,
       };
 
       setBackendData(formattedData);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error calculating impact:", error);
-      setErrors((prev) => ({
-        ...prev,
-        calculate: "Ошибка при расчете орбиты",
-      }));
+      // При ошибке тоже создаем объект с error
+      setBackendData({
+        success: false,
+        error: error.message || "Ошибка при расчете",
+        time: "00:00",
+        value: 0,
+      });
     } finally {
       setIsCalculating(false);
     }
