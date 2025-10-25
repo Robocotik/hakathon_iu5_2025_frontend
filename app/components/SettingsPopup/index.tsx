@@ -54,7 +54,7 @@ export const SettingsPopup: React.FC<SettingsPopupProps> = ({
 
       {/* Popup */}
       <div
-        className='fixed z-50 bg-gray border border-gray-light rounded-lg shadow-lg overflow-hidden min-w-48 animate-popup'
+        className='fixed z-50 bg-gray border border-gray-light rounded-lg shadow-lg overflow-hidden w-48 animate-popup'
         style={{
           left: position.x - 180, // Сдвигаем влево, чтобы popup был справа от иконки
           top: position.y + 10, // Немного ниже иконки

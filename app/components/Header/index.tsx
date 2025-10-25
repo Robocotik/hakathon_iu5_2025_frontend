@@ -103,10 +103,10 @@ export const Header: FC<Props> = () => {
 
       <nav className='flex gap-4 items-center'>
         <Link
-          className='text-gray-text hover:text-gray-light transition-colors duration-200 relative group  hover:shadow-glow-blue'
+          className='text-gray-text hover:text-gray-light transition-colors duration-200 relative group hover:glow-blue'
           href='/history'>
           History
-          <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:shadow-glow-underline'></span>
+          <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:glow-underline'></span>
         </Link>
       </nav>
 
@@ -114,19 +114,19 @@ export const Header: FC<Props> = () => {
         <div
           ref={settingsRef}
           onClick={handleSettingsClick}
-          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
+          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-sm hover:shadow-white/70 flex items-center justify-center relative z-10'>
           <Icon name='settings' className='text-gray-text' size={24} />
         </div>
         <div
           ref={notificationRef}
           onClick={handleNotificationClick}
-          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 relative flex items-center justify-center z-10'>
+          className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-sm hover:shadow-white/70 relative flex items-center justify-center z-10'>
           <Icon name='notification' className='text-gray-text' size={24} />
           {/* Индикатор новых уведомлений */}
           <div className='absolute -top-1 -right-1 w-3 h-3 bg-blue-light rounded-full border-2 border-black'></div>
         </div>
         {isLoggedIn ? (
-          <div className='rounded-full transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
+          <div className='rounded-full transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-sm hover:shadow-white/70 flex items-center justify-center relative z-10'>
             {isLoggedIn ? (
               <Image
                 className='w-full h-full rounded-full'
@@ -140,7 +140,7 @@ export const Header: FC<Props> = () => {
             )}
           </div>
         ) : (
-          <div className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-xs hover:shadow-white/70 flex items-center justify-center relative z-10'>
+          <div className='rounded-full p-3 transition-all duration-200 bg-gray w-12 h-12 cursor-pointer hover:shadow-sm hover:shadow-white/70 flex items-center justify-center relative z-10'>
             <Icon name='emptyUser' className='text-gray-text' size={24} />
           </div>
         )}
