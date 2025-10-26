@@ -79,10 +79,7 @@ export const CalculationForm = () => {
                     Прямое восхождение (часы)
                   </label>
                   <input
-                    type='number'
-                    step='0.01'
-                    min='0'
-                    max='24'
+                    type='text'
                     value={obs.ra_hours}
                     onChange={(e) =>
                       updateObservation(index, 'ra_hours', parseFloat(e.target.value) || 0)
@@ -94,10 +91,7 @@ export const CalculationForm = () => {
                 <div>
                   <label className='block text-sm text-gray-300 mb-1'>Склонение (градусы)</label>
                   <input
-                    type='number'
-                    step='0.01'
-                    min='-90'
-                    max='90'
+                    type='text'
                     value={obs.dec_degrees}
                     onChange={(e) =>
                       updateObservation(index, 'dec_degrees', parseFloat(e.target.value) || 0)

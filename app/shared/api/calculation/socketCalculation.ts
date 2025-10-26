@@ -66,107 +66,99 @@ export const createCalculation = (
         console.log('✅ UserID received:', userId);
 
         // Слушаем события результата
-      const resultHandler = (result: any) => {
-        console.log('Received result:', result);
-        let parsedResult: CalculationResult;
+        const resultHandler = (result: any) => {
+          console.log('Received result:', result);
+          let parsedResult: CalculationResult;
 
-        if (typeof result === 'string') {
-          try {
-            parsedResult = JSON.parse(result);
-          } catch {
-            parsedResult = result as unknown as CalculationResult;
+          if (typeof result === 'string') {
+            try {
+              parsedResult = JSON.parse(result);
+            } catch {
+              parsedResult = result as unknown as CalculationResult;
+            }
+          } else {
+            parsedResult = result as CalculationResult;
           }
-        } else {
-          parsedResult = result as CalculationResult;
-        }
 
-        onResult(parsedResult);
-        cleanup();
-        resolve(parsedResult.jobId);
-      };
-
-      // Слушаем события статуса
-      const statusHandler = (status: any) => {
-        console.log('Received status:', status);
-        let parsedStatus: CalculationStatus;
-
-        if (typeof status === 'string') {
-          try {
-            parsedStatus = JSON.parse(status);
-          } catch {
-            parsedStatus = status as unknown as CalculationStatus;
-          }
-        } else {
-          parsedStatus = status as CalculationStatus;
-        }
-
-        onStatus(parsedStatus);
-      };
-
-      // Слушаем события ошибок
-      const errorHandler = (error: any) => {
-        console.error('Received error:', error);
-        let parsedError: CalculationError;
-
-        if (typeof error === 'string') {
-          try {
-            parsedError = JSON.parse(error);
-          } catch {
-            parsedError = { jobId: '', error: error, message: error };
-          }
-        } else {
-          parsedError = error as CalculationError;
-        }
-
-        onError(parsedError);
-        cleanup();
-        reject(new Error(parsedError.error || parsedError.message || 'Ошибка расчета'));
-      };
-
-      // Функция очистки слушателей
-      const cleanup = () => {
-        socket.off('result', resultHandler);
-        socket.off('status', statusHandler);
-        socket.off('error', errorHandler);
-      };
-
-      // Устанавливаем слушатели
-      socket.on('result', resultHandler);
-      socket.on('status', statusHandler);
-      socket.on('error', errorHandler);
-
-      // Отправляем запрос в формате как в примере
-      const requestData = {
-        observations: data.observations,
-      };
-
-      console.log('Sending calculation request:', requestData);
-      console.log('Socket auth:', socket.auth);
-      console.log('Socket headers:', socket.io.opts.extraHeaders);
-      console.log('User ID for request:', userId);
-
-      // Отправляем событие с Authorization в данных и query параметрами
-      const queryParams: { token: string; userId?: string } = { token: token };
-      if (userId) {
-        queryParams.userId = userId;
-      }
-
-      console.log('Final query params:', queryParams);
-      console.log('About to emit calculate event...');
-
-      socket.emit('calculate', requestData);
-
-      console.log('Calculate event emitted successfully');
-
-      // Таймаут для запроса (5 минут)
-      setTimeout(
-        () => {
+          onResult(parsedResult);
           cleanup();
-          reject(new Error('Превышено время ожидания расчета'));
-        },
-        5 * 60 * 1000,
-      );
-      
+          resolve(parsedResult.jobId);
+        };
+
+        // Слушаем события статуса
+        const statusHandler = (status: any) => {
+          console.log('Received status:', status);
+          let parsedStatus: CalculationStatus;
+
+          if (typeof status === 'string') {
+            try {
+              parsedStatus = JSON.parse(status);
+            } catch {
+              parsedStatus = status as unknown as CalculationStatus;
+            }
+          } else {
+            parsedStatus = status as CalculationStatus;
+          }
+
+          onStatus(parsedStatus);
+        };
+
+        // Слушаем события ошибок
+        const errorHandler = (error: any) => {
+          console.error('Received error:', error);
+          let parsedError: CalculationError;
+
+          if (typeof error === 'string') {
+            try {
+              parsedError = JSON.parse(error);
+            } catch {
+              parsedError = { jobId: '', error: error, message: error };
+            }
+          } else {
+            parsedError = error as CalculationError;
+          }
+
+          onError(parsedError);
+          cleanup();
+          reject(new Error(parsedError.error || parsedError.message || 'Ошибка расчета'));
+        };
+
+        // Функция очистки слушателей
+        const cleanup = () => {
+          socket.off('result', resultHandler);
+          socket.off('status', statusHandler);
+          socket.off('error', errorHandler);
+        };
+
+        // Устанавливаем слушатели
+        socket.on('result', resultHandler);
+        socket.on('status', statusHandler);
+        socket.on('error', errorHandler);
+
+        // Отправляем запрос в формате как в примере
+        const requestData = {
+          userId: userId, // ← userId в теле сообщения
+          observations: data.observations,
+        };
+
+        console.log('Sending calculation request:', requestData);
+        console.log('Socket auth:', socket.auth);
+        console.log('Socket headers:', socket.io.opts.extraHeaders);
+        console.log('User ID for request:', userId);
+
+        console.log('📤 ОТПРАВЛЯЕМ CALCULATE С ДАННЫМИ:', requestData);
+        console.log('About to emit calculate event...');
+
+        socket.emit('calculate', requestData);
+
+        console.log('Calculate event emitted successfully'); // Таймаут для запроса (5 минут)
+        setTimeout(
+          () => {
+            cleanup();
+            reject(new Error('Превышено время ожидания расчета'));
+          },
+          5 * 60 * 1000,
+        );
       } catch (error) {
         console.error('Failed to get userId or send calculation:', error);
         reject(error);
