@@ -102,12 +102,14 @@ export const Header: FC<Props> = () => {
       </Link>
 
       <nav className='flex gap-4 items-center'>
-        <Link
-          className='text-gray-text hover:text-gray-light transition-colors duration-200 relative group hover:glow-blue'
-          href='/history'>
-          History
-          <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:glow-underline'></span>
-        </Link>
+        {isLoggedIn && (
+          <Link
+            className='text-gray-text hover:text-gray-light transition-colors duration-200 relative group hover:glow-blue'
+            href='/history'>
+            История
+            <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:glow-underline'></span>
+          </Link>
+        )}
       </nav>
 
       <div className='flex gap-4 items-center relative z-10'>

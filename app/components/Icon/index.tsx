@@ -153,6 +153,14 @@ export const Icon: React.FC<IconProps> = ({ name, className = '', size = 20 }) =
             d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'
           />
         );
+      case 'clock':
+        return <path stroke='currentColor' d='M12 6v6l4 2m6-8a9 9 0 11-18 0 9 9 0 0118 0z' />;
+      case 'chevron-right':
+        return <path stroke='currentColor' d='M9 5l7 7-7 7' />;
+      case 'x':
+        return <path stroke='currentColor' d='M18 6L6 18M6 6l12 12' />;
+      case 'history':
+        return <path stroke='currentColor' d='M1 4v6h6m16-6a9 9 0 11-18 0 9 9 0 0118 0z' />;
       default:
         return null;
     }
