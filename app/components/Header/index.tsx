@@ -91,7 +91,7 @@ export const Header: FC<Props> = () => {
     <header className='w-full flex items-center justify-between p-4 bg-transparent relative z-50'>
       <Link
         href='/'
-        className='h-12 w-16 cursor-pointer shadow-2xl hover:shadow-white/15 hover:shadow-md transition-shadow duration-300 relative z-10'>
+        className='h-12 w-16 cursor-pointer shadow-2xl hover:shadow-white/15  hover:glow-blue-large  transition-shadow duration-300 relative z-10'>
         <Image
           className='h-full w-full pointer-events-none'
           src='/icons/logo.svg'
@@ -103,12 +103,20 @@ export const Header: FC<Props> = () => {
 
       <nav className='flex gap-4 items-center'>
         {isLoggedIn && (
-          <Link
-            className='text-gray-text hover:text-gray-light transition-colors duration-200 relative group hover:glow-blue'
-            href='/history'>
-            История
-            <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:glow-underline'></span>
-          </Link>
+          <>
+            <Link
+              className='text-gray-text p-4 hover:text-gray-light transition-colors duration-200 relative group hover:glow-blue'
+              href='/calculator'>
+              Калькулятор
+              <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:glow-underline '></span>
+            </Link>
+            <Link
+              className='text-gray-text p-4 hover:text-gray-light transition-colors duration-200 relative group hover:glow-blue'
+              href='/history'>
+              История
+              <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-blue-light transition-all duration-300 group-hover:w-full group-hover:glow-underline'></span>
+            </Link>
+          </>
         )}
       </nav>
 

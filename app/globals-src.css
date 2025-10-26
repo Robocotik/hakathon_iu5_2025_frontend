@@ -41,15 +41,11 @@
 @layer components {
   /* Glowing shadow effect for navigation links */
   .glow-blue {
-    text-shadow:
-      0 0 5px #6a8db3,
-      0 0 10px #6a8db3,
-      0 0 15px #6a8db3,
-      0 0 20px #6a8db3;
-    box-shadow:
-      0 0 10px rgba(106, 141, 179, 0.3),
-      0 0 20px rgba(106, 141, 179, 0.2),
-      0 0 30px rgba(106, 141, 179, 0.1);
+    text-shadow: 0 0 10px #6a8db3;
+  }
+
+  .glow-blue-large {
+    text-shadow: 0 0 30px #6a8db3;
   }
 
   .glow-underline {

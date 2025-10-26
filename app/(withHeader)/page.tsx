@@ -1,5 +1,5 @@
 import { Planet } from '../components/Planet';
-import { FormLayout } from '@/components/GlassContainer/GlassContainer.usecase';
+import { RealComets } from '../components/RealComets';
 import { useGetStars } from '../hooks/useGetStars';
 
 export default function Home() {
@@ -8,10 +8,13 @@ export default function Home() {
   return (
     <main className='h-full bg-transparent relative overflow-hidden'>
       {/* Main content area */}
-      <div className='flex z-0 items-start justify-center min-h-[calc(100vh-105px)] relative'>
+      <div className='flex z-0 items-center justify-center min-h-[calc(100vh-105px)] relative'>
         {/* Planet component */}
         <div className='relative z-10'>
           <Planet size={250} className='drop-shadow-2xl' />
+
+          {/* Real comets from calculation history */}
+          <RealComets planetSize={250} className='z-20' />
         </div>
 
         {/* Floating stars/particles */}
@@ -32,7 +35,7 @@ export default function Home() {
       </div>
 
       {/* Ваши контейнеры внизу */}
-      <FormLayout />
+      {/* <FormLayout /> */}
     </main>
   );
 }

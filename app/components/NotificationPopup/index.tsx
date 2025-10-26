@@ -1,6 +1,7 @@
 import React from 'react';
 import { notificationsUsecase } from './NotificationPopup.usecase';
 import { Icon } from '../Icon';
+import Link from 'next/link.js';
 
 interface NotificationPopupProps {
   isVisible: boolean;
@@ -81,9 +82,9 @@ export const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
         {/* Футер */}
         <div className='px-4 py-3 bg-gray-dark border-t border-gray-light'>
-          <button className='w-full text-xs text-blue-light hover:text-white transition-colors duration-200'>
+          <Link href={'/history'} className='w-full text-xs text-blue-light hover:text-white transition-colors duration-200'>
             Посмотреть все уведомления
-          </button>
+          </Link>
         </div>
       </div>
     </>

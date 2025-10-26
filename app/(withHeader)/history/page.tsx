@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import { Icon } from '@/components/Icon';
 import { useGetStars } from '../../hooks/useGetStars';
-import { useHistoryData, type HistoryItem } from '../../hooks/useHistoryData';
+import { useGetHistory } from '../../hooks/useGetHistory';
+import type { HistoryItem } from '../../shared/api/history/getHistory';
 
 export default function HistoryPage() {
   const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null);
-  const { history, loading, error, refreshHistory } = useHistoryData();
+  const { history, isLoading: loading, error, refetch } = useGetHistory();
   const stars = useGetStars();
 
   const formatDate = (dateString: string) => {
@@ -90,7 +91,7 @@ export default function HistoryPage() {
                 <Icon name='info' className='w-8 h-8 text-red-400 mx-auto mb-2' />
                 <p className='text-red-400 mb-3'>{error}</p>
                 <button
-                  onClick={refreshHistory}
+                  onClick={() => refetch()}
                   className='px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors'>
                   Попробовать снова
                 </button>
@@ -99,7 +100,8 @@ export default function HistoryPage() {
 
             {!loading &&
               !error &&
-              history.map((item) => (
+              history &&
+              history.map((item: HistoryItem) => (
                 <div
                   key={item.id}
                   onClick={() => setSelectedItem(item)}

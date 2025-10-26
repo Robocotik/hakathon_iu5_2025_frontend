@@ -161,6 +161,8 @@ export const Icon: React.FC<IconProps> = ({ name, className = '', size = 20 }) =
         return <path stroke='currentColor' d='M18 6L6 18M6 6l12 12' />;
       case 'history':
         return <path stroke='currentColor' d='M1 4v6h6m16-6a9 9 0 11-18 0 9 9 0 0118 0z' />;
+      case 'plus':
+        return <path stroke='currentColor' d='M12 6v6m0 0v6m0-6h6m-6 0H6' />;
       default:
         return null;
     }
