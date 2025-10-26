@@ -2,10 +2,24 @@
 
 import { CalculationForm } from '@/components/CalculationForm';
 import { useGetStars } from '../../hooks/useGetStars';
+import { useEffect } from 'react';
+import { socketService } from '../../shared/services/socketService';
 
 export default function CalculatorPage() {
   const stars = useGetStars();
 
+    // Подключаем Socket.IO при открытии страницы history
+  useEffect(() => {
+    console.log('Calculator page mounted, connecting to Socket.IO...');
+    const socket = socketService.connect();
+    
+    // Очистка при размонтировании компонента
+    return () => {
+      console.log('Calculator page unmounted, but keeping socket connected for other pages');
+      // Не отключаем socket здесь, так как он может использоваться на других страницах
+    };
+  }, []);
+  
   return (
     <main className='h-full bg-transparent relative overflow-hidden'>
       {/* Floating stars background */}

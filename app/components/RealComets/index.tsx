@@ -178,7 +178,7 @@ export const RealComets: React.FC<RealCometsProps> = ({ planetSize, className = 
       {/* Панель информации */}
       <div className='absolute top-4 right-4 bg-black/60 backdrop-blur-md rounded-lg p-4 text-white max-w-xs'>
         <h3 className='text-sm font-semibold text-blue-300 mb-2'>
-          Реальные кометы ({completedComets.length})
+          Кометы ({completedComets.length})
         </h3>
         <div className='space-y-2 text-xs max-h-40 overflow-y-auto'>
           {completedComets.map((comet, index) => {

@@ -53,13 +53,19 @@ export const createCalculation = (
     }
 
     // Функция для отправки данных
-    const sendCalculation = () => {
+    const sendCalculation = async () => {
       if (!socket.connected) {
         reject(new Error('Socket не подключен'));
         return;
       }
 
-      // Слушаем события результата
+      // Ждем пока придет userId от сервера
+      try {
+        console.log('✅ Waiting for userId from server...');
+        const userId = await socketService.waitForUserId();
+        console.log('✅ UserID received:', userId);
+
+        // Слушаем события результата
       const resultHandler = (result: any) => {
         console.log('Received result:', result);
         let parsedResult: CalculationResult;
@@ -134,9 +140,6 @@ export const createCalculation = (
         observations: data.observations,
       };
 
-      // Получаем userId из socketService
-      const userId = socketService.getUserId();
-
       console.log('Sending calculation request:', requestData);
       console.log('Socket auth:', socket.auth);
       console.log('Socket headers:', socket.io.opts.extraHeaders);
@@ -148,7 +151,12 @@ export const createCalculation = (
         queryParams.userId = userId;
       }
 
-      socket.emit('calculate', requestData, queryParams);
+      console.log('Final query params:', queryParams);
+      console.log('About to emit calculate event...');
+
+      socket.emit('calculate', requestData);
+
+      console.log('Calculate event emitted successfully');
 
       // Таймаут для запроса (5 минут)
       setTimeout(
@@ -158,6 +166,11 @@ export const createCalculation = (
         },
         5 * 60 * 1000,
       );
+      
+      } catch (error) {
+        console.error('Failed to get userId or send calculation:', error);
+        reject(error);
+      }
     };
 
     // Если socket уже подключен, отправляем сразу

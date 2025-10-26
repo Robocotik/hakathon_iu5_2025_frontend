@@ -6,6 +6,8 @@ class SocketService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private userId: string | null = null;
+  private userIdPromise: Promise<string> | null = null;
+  private userIdResolve: ((userId: string) => void) | null = null;
 
   connect(): Socket {
     // Принудительно отключаем существующее соединение
@@ -13,6 +15,12 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
     }
+
+    // Сбрасываем промис при новом подключении
+    this.userId = null;
+    this.userIdPromise = new Promise((resolve) => {
+      this.userIdResolve = resolve;
+    });
 
     const token = authTokenUtils.getToken();
     console.log(
@@ -26,7 +34,7 @@ class SocketService {
       transports: ['websocket', 'polling'],
       query: {
         token: token,
-        user: this.userId,
+        userId: this.userId,
       },
       forceNew: true,
     });
@@ -52,17 +60,41 @@ class SocketService {
       this.handleReconnect();
     });
 
-    this.socket.on('user', (message: { userId: string }) => {
-      console.log('Received user event:', message);
-      if (message && message.userId) {
-        this.userId = message.userId;
-        console.log('User ID saved:', this.userId);
+    this.socket.on('user', (data: { message: string }) => {
+      console.log('✅ Received user event:', data);
+      console.log('Raw user event data:', JSON.stringify(data));
+
+      if (data && data.message) {
+        this.userId = data.message;
+        console.log('✅ User ID saved successfully:', this.userId);
+
+        // Резолвим промис когда приходит userId
+        if (this.userIdResolve) {
+          this.userIdResolve(this.userId);
+          this.userIdResolve = null;
+        }
+      } else {
+        console.warn('User event received but no message field found:', data);
       }
     });
   }
 
   getUserId(): string | null {
+    console.log('Getting user ID:', this.userId);
     return this.userId;
+  }
+
+  // Новый метод - ждем пока придет userId
+  async waitForUserId(): Promise<string> {
+    if (this.userId) {
+      return this.userId;
+    }
+
+    if (this.userIdPromise) {
+      return await this.userIdPromise;
+    }
+
+    throw new Error('Socket not connected properly');
   }
 
   private handleReconnect() {
